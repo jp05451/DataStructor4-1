@@ -1,7 +1,5 @@
 #include <iostream>
 
-using namespace std;
-
 template <class C>
 void merge(C arr[], int begin, int mid, int end)
 {
@@ -28,7 +26,7 @@ void merge(C arr[], int begin, int mid, int end)
     int mergeIndex = begin;
     while (leftIndex < subArrayLeft && rightIndex < subArrayRight)
     {
-        if (leftArray[leftIndex] <= rightArray[rightIndex])
+        if(leftArray[leftIndex]<=rightArray[rightIndex])
         {
             arr[mergeIndex] = leftArray[leftIndex];
             leftIndex++;
@@ -40,13 +38,13 @@ void merge(C arr[], int begin, int mid, int end)
         }
         mergeIndex++;
     }
-    while (leftIndex < subArrayLeft)
+    while(leftIndex<subArrayLeft)
     {
         arr[mergeIndex] = leftArray[leftIndex];
         mergeIndex++;
         leftIndex++;
     }
-    while (rightIndex < subArrayRight)
+    while(rightIndex<subArrayRight)
     {
         arr[mergeIndex] = rightArray[rightIndex];
         mergeIndex++;
@@ -66,31 +64,3 @@ void mergeSort(T arr[], int begin, int end)
     }
 }
 
-
-int main()
-{
-    int times;
-
-    cin >> times;
-    for (int t = 0; t < times; t++)
-    {
-        int length;
-        cin >> length;
-        int *list = new int[length];
-        for (int i = 0; i < length; i++)
-        {
-            cin >> list[i];
-        }
-        mergeSort(list, 0, length - 1);
-        for (int i = 0; i < length; i++)
-        {
-            cout << list[i];
-            if (i != length - 1)
-            {
-                cout << " ";
-            }
-        }
-        cout << endl;
-        delete[] list;
-    }
-}
