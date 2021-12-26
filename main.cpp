@@ -2,70 +2,93 @@
 
 using namespace std;
 
-template <class C>
-void merge(C arr[], int begin, int mid, int end)
+
+
+void merge(int arr[], int begin, int mid, int end)
 {
 
-    int const subArrayLeft = mid - begin + 1;
-    int const subArrayRight = end - mid;
+    // Create L ← A[begin..mid] and M ← A[mid+1..end]
+    int const n1 = mid - begin + 1;
+    int const n2 = end - mid;
 
-    C *leftArray = new C[subArrayLeft];
-    C *rightArray = new C[subArrayRight];
+    //int L[n1], M[n2];
+    int *L = new int[n1];
+    int *M = new int[n2];
 
-    //copy array
-    for (int i = 0; i <= subArrayLeft; i++)
+    for (int i = 0; i < n1; i++)
+        L[i] = arr[begin + i];
+    for (int j = 0; j < n2; j++)
+        M[j] = arr[mid + 1 + j];
+
+    // Maintain current index of sub-arrays and main array
+    int i, j, k;
+    i = 0;
+    j = 0;
+    k = begin;
+
+    // Until we reach either end of either L or M, pick larger among
+    // elements L and M and place them in the correct position at A[begin..end]
+    while (i < n1 && j < n2)
     {
-        leftArray[i] = arr[begin + i];
-    }
-    for (int i = mid + 1; i <= end; i++)
-    {
-        rightArray[i - mid - 1] = arr[i];
-    }
-
-    int leftIndex = 0;
-    int rightIndex = 0;
-
-    int mergeIndex = begin;
-    while (leftIndex < subArrayLeft && rightIndex < subArrayRight)
-    {
-        if (leftArray[leftIndex] <= rightArray[rightIndex])
+        if (L[i] <= M[j])
         {
-            arr[mergeIndex] = leftArray[leftIndex];
-            leftIndex++;
+            arr[k] = L[i];
+            i++;
         }
         else
         {
-            arr[mergeIndex] = rightArray[rightIndex];
-            rightIndex++;
+            arr[k] = M[j];
+            j++;
         }
-        mergeIndex++;
+        k++;
     }
-    while (leftIndex < subArrayLeft)
+
+    // When we run out of elements in either L or M,
+    // pick up the remaining elements and put in A[begin..end]
+    while (i < n1)
     {
-        arr[mergeIndex] = leftArray[leftIndex];
-        mergeIndex++;
-        leftIndex++;
+        arr[k] = L[i];
+        i++;
+        k++;
     }
-    while (rightIndex < subArrayRight)
+
+    while (j < n2)
     {
-        arr[mergeIndex] = rightArray[rightIndex];
-        mergeIndex++;
-        rightIndex++;
+        arr[k] = M[j];
+        j++;
+        k++;
     }
 }
 
-template <class T>
-void mergeSort(T arr[], int begin, int end)
+// Divide the array into two subarrays, sort them and merge them
+void mergeSort(int arr[], int begin, int end)
 {
     if (begin < end)
     {
-        int mid = (begin + end) / 2;
+        // mid is the point where the array is divided into two subarrays
+        int mid = begin + (end - begin) / 2;
+
         mergeSort(arr, begin, mid);
         mergeSort(arr, mid + 1, end);
+
+        // Merge the sorted subarrays
         merge(arr, begin, mid, end);
     }
 }
 
+// Print the array
+void printArray(int arr[], int size)
+{
+    for (int i = 0; i < size; i++)
+    {
+        cout << arr[i];
+        if (i != size - 1)
+        {
+            cout << " ";
+        }
+    }
+    cout << endl;
+}
 
 int main()
 {
@@ -82,15 +105,7 @@ int main()
             cin >> list[i];
         }
         mergeSort(list, 0, length - 1);
-        for (int i = 0; i < length; i++)
-        {
-            cout << list[i];
-            if (i != length - 1)
-            {
-                cout << " ";
-            }
-        }
-        cout << endl;
+        printArray(list, length);
         delete[] list;
     }
 }
